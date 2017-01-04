@@ -1,0 +1,37 @@
+{
+  "name": "express-asyncify",
+  "version": "1.0.0",
+  "description": "Easy support async/await to express",
+  "main": "index.js",
+  "repository": "pkolt/express-asyncify",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "express",
+    "async",
+    "await"
+  ],
+  "bugs": {
+    "url": "https://github.com/pkolt/express-asyncify/issues",
+    "email": "pkoltyshev@gmail.com"
+  },
+  "author": "Pavel Koltyshev <pkoltyshev@gmail.com>",
+  "files": [
+    "readme.md",
+    "license.md",
+    "index.js"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 4"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "co": "^4.6.0",
+    "express": "^4.14.0",
+    "mocha": "^3.2.0",
+    "supertest": "^2.0.1",
+    "supertest-as-promised": "^4.0.2"
+  }
+}
