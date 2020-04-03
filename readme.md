@@ -1,4 +1,4 @@
-# express-asyncify [![Build Status](https://travis-ci.org/pkolt/express-asyncify.svg?branch=master)](https://travis-ci.org/pkolt/express-asyncify)
+# express-asyncify ![](https://github.com/pkolt/express-asyncify/workflows/main/badge.svg)
 
 Easy support `async/await` to [express](http://expressjs.com/).
 
