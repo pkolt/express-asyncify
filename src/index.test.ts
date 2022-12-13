@@ -1,12 +1,10 @@
-'use strict';
+import {wrap} from 'co';
+import assert from 'assert';
+import request from 'supertest-as-promised';
+import express from 'express';
+import asyncify from './';
 
-const wrap = require('co').wrap;
-const assert = require('assert');
-const request = require('supertest-as-promised');
-const express = require('express');
-const asyncify = require('../dist');
-
-const getDataAsync = (data) => {
+const getDataAsync = (data: any) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             (data instanceof Error ? reject : resolve)(data);
@@ -14,7 +12,7 @@ const getDataAsync = (data) => {
     });
 };
 
-const handler500 = (err, req, res, next) => {
+const handler500 = (err: any, req: any, res: any, next: any) => {
     res.status(500).send('fail');
 };
 
@@ -22,7 +20,7 @@ describe('asyncify', () => {
     it('sync request', wrap(function*() {
         const app = asyncify(express());
 
-        app.get('/', (req, res) => {
+        app.get('/', (req: any, res: any) => {
             res.send('ok');
         });
 
@@ -33,7 +31,7 @@ describe('asyncify', () => {
     it('catch error to sync request', wrap(function*() {
         const app = asyncify(express());
 
-        app.get('/', (req, res) => {
+        app.get('/', (req: any, res: any) => {
             throw new Error();
         });
 
@@ -77,13 +75,13 @@ describe('asyncify', () => {
             next();
         });
 
-        const syncMiddleware = function(req, res, next) {
+        const syncMiddleware = function(req: any, res: any, next: any) {
             next();
         };
 
         app.use(asyncMiddleware, syncMiddleware, handler500);
 
-        app.get('/', (req, res) => {
+        app.get('/', (req: any, res: any) => {
             res.send('ok');
         });
 
