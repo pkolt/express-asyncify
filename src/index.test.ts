@@ -1,9 +1,9 @@
 import assert from 'assert';
 import request from 'supertest-as-promised';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import asyncify from './';
 
-const getDataAsync = (data: any) => {
+const getDataAsync = (data: string | Error) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       (data instanceof Error ? reject : resolve)(data);
@@ -11,7 +11,7 @@ const getDataAsync = (data: any) => {
   });
 };
 
-const handler500 = (err: any, req: any, res: any, next: any) => {
+const handler500 = (err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send('fail');
 };
 
@@ -19,7 +19,7 @@ describe('asyncify', () => {
   it('sync request', async () => {
     const app = asyncify(express());
 
-    app.get('/', (req: any, res: any) => {
+    app.get('/', (req: Request, res: Response) => {
       res.send('ok');
     });
 
@@ -30,7 +30,7 @@ describe('asyncify', () => {
   it('catch error to sync request', async () => {
     const app = asyncify(express());
 
-    app.get('/', (req: any, res: any) => {
+    app.get('/', (req: Request, res: Response) => {
       throw new Error();
     });
 
@@ -43,7 +43,7 @@ describe('asyncify', () => {
   it('async request', async () => {
     const app = asyncify(express());
 
-    app.get('/', async (req: any, res: any) => {
+    app.get('/', async (req: Request, res: Response) => {
       const data = await getDataAsync('ok');
       res.send(data);
     });
@@ -55,7 +55,7 @@ describe('asyncify', () => {
   it('catch error to async request', async () => {
     const app = asyncify(express());
 
-    app.get('/', async (req: any, res: any) => {
+    app.get('/', async (req: Request, res: Response) => {
       const data = await getDataAsync(new Error());
       res.send(data);
     });
@@ -69,18 +69,18 @@ describe('asyncify', () => {
   it('catch error to async/sync middleware', async () => {
     const app = asyncify(express());
 
-    const asyncMiddleware = async (req: any, res: any, next: any) => {
+    const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
       const data = await getDataAsync(new Error());
       next();
     };
 
-    const syncMiddleware = function (req: any, res: any, next: any) {
+    const syncMiddleware = function (req: Request, res: Response, next: NextFunction) {
       next();
     };
 
     app.use(asyncMiddleware, syncMiddleware, handler500);
 
-    app.get('/', (req: any, res: any) => {
+    app.get('/', (req: Request, res: Response) => {
       res.send('ok');
     });
 
@@ -91,7 +91,7 @@ describe('asyncify', () => {
   it('catch error to app.all()', async () => {
     const app = asyncify(express());
 
-    app.all('/', async (req: any, res: any) => {
+    app.all('/', async (req: Request, res: Response) => {
       const data = await getDataAsync(new Error());
       res.send(data);
     });
@@ -114,7 +114,7 @@ describe('asyncify', () => {
   it('catch error to app.route()', async () => {
     const app = asyncify(express());
 
-    app.route('/posts').get(async (req: any, res: any) => {
+    app.route('/posts').get(async (req: Request, res: Response) => {
       const data = await getDataAsync(new Error());
       res.send(data);
     });
@@ -129,7 +129,7 @@ describe('asyncify', () => {
     const app = express();
     const router = asyncify(express.Router());
 
-    router.get('/', async (req: any, res: any) => {
+    router.get('/', async (req: Request, res: Response) => {
       const data = await getDataAsync(new Error());
       res.send(data);
     });
