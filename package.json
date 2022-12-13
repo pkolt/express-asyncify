@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">= 8"
+    "node": ">= 16"
   },
   "devDependencies": {
     "@types/node": "^18.11.14",
