@@ -2,10 +2,13 @@
   "name": "express-asyncify",
   "version": "1.0.1",
   "description": "Easy support async/await to express",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "pkolt/express-asyncify",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "tsc",
+    "prepare": "npm run build"
   },
   "keywords": [
     "express",
@@ -18,20 +21,26 @@
   },
   "author": "Pavel Koltyshev <pkoltyshev@gmail.com>",
   "files": [
-    "readme.md",
-    "license.md",
-    "index.js"
+    "README.md",
+    "LICENSE.md",
+    "dist/index.js",
+    "dist/index.d.ts"
   ],
   "license": "MIT",
   "engines": {
     "node": ">= 8"
   },
   "devDependencies": {
-    "assert": "2.0.0",
-    "co": "4.6.0",
+    "@types/node": "^18.11.14",
+    "assert": "^2.0.0",
+    "co": "^4.6.0",
     "express": "4.17.1",
-    "mocha": "7.1.1",
-    "supertest": "4.0.2",
-    "supertest-as-promised": "4.0.2"
+    "mocha": "^7.1.1",
+    "supertest": "^4.0.2",
+    "supertest-as-promised": "^4.0.2",
+    "typescript": "^4.9.4"
+  },
+  "peerDependencies": {
+    "express": "^4.17.1"
   }
 }

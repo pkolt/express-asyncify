@@ -4,8 +4,7 @@ const wrap = require('co').wrap;
 const assert = require('assert');
 const request = require('supertest-as-promised');
 const express = require('express');
-const asyncify = require('../');
-
+const asyncify = require('../dist');
 
 const getDataAsync = (data) => {
     return new Promise((resolve, reject) => {
