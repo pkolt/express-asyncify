@@ -1,44 +1,78 @@
-import http from 'http';
+import { Request, Response, NextFunction } from 'express';
 
-const httpMethodNames = http.METHODS.map((name) => name.toLowerCase());
-const methodNames = ['route', 'use', 'all', 'del'].concat(httpMethodNames);
+// https://expressjs.com/en/4x/api.html#routing-methods
+const routingMethods = [
+  'checkout',
+  'copy',
+  'delete',
+  'get',
+  'head',
+  'lock',
+  'merge',
+  'mkactivity',
+  'mkcol',
+  'move',
+  'm-search',
+  'notify',
+  'options',
+  'patch',
+  'post',
+  'purge',
+  'put',
+  'report',
+  'search',
+  'subscribe',
+  'trace',
+  'unlock',
+  'unsubscribe',
+] as const;
 
-const processError = (result: any, next: any) => (result instanceof Promise ? result.catch(next) : null);
+const appMethods = [...routingMethods, 'route', 'use', 'all'] as const;
+
+const processError = (result: Promise<unknown> | void, next: NextFunction) => {
+  if (result instanceof Promise) {
+    result.catch(next);
+  }
+};
+
+type RequestHandler = (req: Request, res: Response, next: NextFunction) => void;
+type ErrorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => void;
+type Handler = RequestHandler | ErrorHandler;
+
+const isErrorHandler = (handler: Handler): handler is ErrorHandler => handler.length === 4;
 
 /**
  * Added support promise to view.
- * @param {*} view
- * @return {*}
  */
-const wrapView = (view: any) => {
-  if (view.length === 4) {
-    return (err: any, req: any, res: any, next: any) => processError(view(err, req, res, next), next);
+const wrapHandler = (handler: Handler): Handler => {
+  if (isErrorHandler(handler)) {
+    return (err: Error, req: Request, res: Response, next: NextFunction) =>
+      processError(handler(err, req, res, next), next);
   }
-  return (req: any, res: any, next: any) => processError(view(req, res, next), next);
+  return (req: Request, res: Response, next: NextFunction) => processError(handler(req, res, next), next);
 };
+
+type AppMethods = typeof appMethods[number];
+type App = { [k in AppMethods]: (...args: any[]) => any };
 
 /**
  * Added support async/await to express.
- * @param {*} app - express application or router.
- * @return {*}
  */
-const asyncify = (app: any) => {
-  for (const name of methodNames) {
+const asyncify = <T extends App>(app: T): T => {
+  for (const name of appMethods) {
     const method = app[name];
     if (typeof method === 'function') {
-      let func;
       if (name === 'route') {
-        func = (...args: any) => {
+        app[name] = (...args) => {
           const router = method.apply(app, args);
           return asyncify(router);
         };
       } else {
-        func = (...args: any) => {
-          const newArgs = args.map((value: any) => (typeof value === 'function' ? wrapView(value) : value));
-          return method.apply(app, newArgs);
+        app[name] = (...args) => {
+          const wrapArgs = args.map((val) => (typeof val === 'function' ? wrapHandler(val) : val));
+          return method.apply(app, wrapArgs);
         };
       }
-      app[name] = func;
     }
   }
   return app;

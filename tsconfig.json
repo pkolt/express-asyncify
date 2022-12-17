@@ -1,4 +1,5 @@
 {
+  // https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
   "compilerOptions": {
     "target": "ES2021",
     "lib": ["ES2021"],
