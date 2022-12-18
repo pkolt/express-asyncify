@@ -11,7 +11,7 @@
     "prepare": "npm run build",
     "format": "prettier --check src",
     "format:fix": "prettier --write src",
-    "release": "npm run prepare && release-it"
+    "release": "dotenv release-it --"
   },
   "keywords": [
     "express",
@@ -39,6 +39,7 @@
     "@types/node": "^18.11.14",
     "@types/supertest-as-promised": "^2.0.38",
     "assert": "^2.0.0",
+    "dotenv-cli": "^6.0.0",
     "express": "4.18.2",
     "mocha": "^10.2.0",
     "prettier": "^2.8.1",
