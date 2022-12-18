@@ -11,7 +11,7 @@
     "prepare": "npm run build",
     "format": "prettier --check src",
     "format:fix": "prettier --write src",
-    "release": "release-it"
+    "release": "npm run prepare && release-it"
   },
   "keywords": [
     "express",

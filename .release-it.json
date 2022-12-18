@@ -1,0 +1,7 @@
+{
+    "git": {
+        "tagName": "express-asyncify@${version}",
+        "commitMessage": "Release ${tagName}",
+        "tagAnnotation": "Release ${tagName}"
+    }
+}
