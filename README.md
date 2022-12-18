@@ -5,7 +5,7 @@ Easy support `async/await` to [express](http://expressjs.com/).
 ## Installation
 
 ```bash
-$ npm install express-asyncify --save
+$ npm i express-asyncify
 ```
 
 ## Usage
@@ -13,8 +13,8 @@ $ npm install express-asyncify --save
 Asyncify express application:
 
 ```javascript
-const express = require('express');
-const asyncify = require('express-asyncify');
+import express from 'express';
+import asyncify from 'express-asyncify';
 
 const app = asyncify(express());
 
@@ -22,15 +22,15 @@ const app = asyncify(express());
 
 app.get('/', async (req, res) => {
     const posts = await Post.findAll();
-    res.render('index', {posts});
+    res.render('index', { posts });
 });
 ```
 
 Asyncify express router:
 
 ```javascript
-const express = require('express');
-const asyncify = require('express-asyncify');
+import express from 'express';
+import asyncify from 'express-asyncify';
 
 const app = express();
 const router = asyncify(express.Router());
@@ -39,7 +39,7 @@ const router = asyncify(express.Router());
 
 router.get('/', async (req, res) => {
     const posts = await Post.findAll();
-    res.render('index', {posts});
+    res.render('index', { posts });
 });
 
 app.use('/blog', router);
@@ -50,10 +50,10 @@ app.use('/blog', router);
   To run the test suite, first install the dependencies, then run `npm test`:
 
 ```bash
-$ npm install
+$ npm ci
 $ npm test
 ```
 
 ## License
 
-  [MIT](license.md)
+  [MIT](LICENSE.md)
