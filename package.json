@@ -11,7 +11,8 @@
     "prepare": "npm run build",
     "format": "prettier --check src",
     "format:fix": "prettier --write src",
-    "release": "dotenv release-it --"
+    "release:prepare": "dotenv release-it -- --no-github",
+    "release:publish": "dotenv release-it -- --no-increment --no-git"
   },
   "keywords": [
     "express",
