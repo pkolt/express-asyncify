@@ -10,7 +10,8 @@
     "build": "tsc",
     "prepare": "npm run build",
     "format": "prettier --check src",
-    "format:fix": "prettier --write src"
+    "format:fix": "prettier --write src",
+    "release": "release-it"
   },
   "keywords": [
     "express",
