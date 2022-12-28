@@ -11,7 +11,7 @@
     "prepare": "npm run build",
     "format": "prettier --check src",
     "format:fix": "prettier --write src",
-    "release:prepare": "dotenv release-it -- --no-github",
+    "release:prepare": "dotenv release-it -- --no-npm.publish --no-github",
     "release:publish": "dotenv release-it -- --no-increment --no-git"
   },
   "keywords": [
