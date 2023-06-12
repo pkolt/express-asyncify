@@ -1,7 +1,9 @@
-import assert from 'assert';
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
 import request from 'supertest-as-promised';
-import express, { Request, Response, NextFunction } from 'express';
-import asyncify from './';
+import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import asyncify from './index.js';
 
 const getDataAsync = (data: string | Error) => {
   return new Promise((resolve, reject) => {

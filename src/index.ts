@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 // https://expressjs.com/en/4x/api.html#routing-methods
 const routingMethods = [
@@ -52,7 +52,7 @@ const wrapHandler = (handler: Handler): Handler => {
   return (req: Request, res: Response, next: NextFunction) => processError(handler(req, res, next), next);
 };
 
-type AppMethods = typeof appMethods[number];
+type AppMethods = (typeof appMethods)[number];
 type App = { [k in AppMethods]: (...args: any[]) => any };
 
 /**
@@ -78,4 +78,4 @@ const asyncify = <T extends App>(app: T): T => {
   return app;
 };
 
-export = asyncify;
+export default asyncify;

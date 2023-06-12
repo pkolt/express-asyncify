@@ -2,6 +2,8 @@
 
 Easy support `async/await` to [express](http://expressjs.com/).
 
+Supports ESM modules 👍
+
 ## Installation
 
 ```bash
