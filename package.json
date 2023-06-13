@@ -43,10 +43,7 @@
   "files": [
     "README.md",
     "LICENSE.md",
-    "dist/esm/index.js",
-    "dist/esm/index.d.ts",
-    "dist/cjs/index.js",
-    "dist/cjs/index.d.ts"
+    "dist/*"
   ],
   "license": "MIT",
   "engines": {
