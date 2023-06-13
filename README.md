@@ -17,6 +17,8 @@ Asyncify express application:
 ```javascript
 import express from 'express';
 import asyncify from 'express-asyncify';
+// For CommonJS
+// const asyncify = require('express-asyncify').default;
 
 const app = asyncify(express());
 
