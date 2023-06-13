@@ -22,7 +22,6 @@
     "test": "node --loader ts-node/esm --test --no-warnings ./src/*.test.ts",
     "build-esm": "tsc",
     "build-cjs": "tsc -p ./tsconfig.cjs.json && ts-rename --cjs ./dist/cjs",
-    "build-types": "tsc -p ./tsconfig.types.json",
     "clean": "rimraf ./dist",
     "build": "npm run clean && npm run build-esm && npm run build-cjs",
     "prepare": "npm run build",
