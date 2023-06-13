@@ -1,6 +1,6 @@
 {
   "name": "express-asyncify",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Easy support async/await to express",
   "type": "module",
   "main": "dist/cjs/index.cjs",
