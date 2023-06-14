@@ -49,6 +49,22 @@ router.get('/', async (req, res) => {
 app.use('/blog', router);
 ```
 
+## TypeScript
+
+If you're having trouble importing a module into TypeScript, try adding settings:
+
+```json
+// tsconfig.json
+{
+    "compilerOptions": {
+      //...
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      //...
+    }
+  }
+```
+
 ## Tests
 
   To run the test suite, first install the dependencies, then run `npm test`:
