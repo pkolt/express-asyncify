@@ -1,6 +1,6 @@
 {
   "name": "express-asyncify",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Easy support async/await to express",
   "type": "module",
   "module": "./dist/esm/index.js",
