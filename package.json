@@ -59,7 +59,7 @@
     "supertest": "^6.3.3",
     "supertest-as-promised": "^4.0.2",
     "ts-node": "^10.9.1",
-    "ts-rename": "^0.0.2",
+    "ts-rename": "^0.1.0",
     "typescript": "^5.1.3"
   },
   "peerDependencies": {
