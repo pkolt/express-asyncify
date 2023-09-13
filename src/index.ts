@@ -69,7 +69,14 @@ const asyncify = <T extends App>(app: T): T => {
         };
       } else {
         app[name] = (...args) => {
-          const wrapArgs = args.map((val) => (typeof val === 'function' ? wrapHandler(val) : val));
+          const wrapArgs = args.map((val) => {
+            if (typeof val === 'function') {
+              return wrapHandler(val);
+            } else if (Array.isArray(val)) {
+              return val.map((it) => (typeof it === 'function' ? wrapHandler(it) : it));
+            }
+            return val;
+          });
           return method.apply(app, wrapArgs);
         };
       }
