@@ -72,7 +72,7 @@ describe('asyncify', () => {
     const app = asyncify(express());
 
     const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-      const data = await getDataAsync(new Error());
+      await getDataAsync(new Error());
       next();
     };
 
@@ -81,6 +81,28 @@ describe('asyncify', () => {
     };
 
     app.use(asyncMiddleware, syncMiddleware, handler500);
+
+    app.get('/', (req: Request, res: Response) => {
+      res.send('ok');
+    });
+
+    const res = await request(app).get('/').expect(500);
+    assert.equal(res.text, 'fail');
+  });
+
+  it('catch error to async/sync middleware as array', async () => {
+    const app = asyncify(express());
+
+    const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+      await getDataAsync(new Error());
+      next();
+    };
+
+    const syncMiddleware = function (req: Request, res: Response, next: NextFunction) {
+      next();
+    };
+
+    app.use([asyncMiddleware, syncMiddleware], handler500);
 
     app.get('/', (req: Request, res: Response) => {
       res.send('ok');
