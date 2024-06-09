@@ -1,4 +1,4 @@
-import { describe, it } from 'node:test';
+import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest-as-promised';
 import express from 'express';
@@ -17,151 +17,149 @@ const handler500 = (err: Error, req: Request, res: Response, next: NextFunction)
   res.status(500).send('fail');
 };
 
-describe('asyncify', () => {
-  it('sync request', async () => {
-    const app = asyncify(express());
+test('sync request', async () => {
+  const app = asyncify(express());
 
-    app.get('/', (req: Request, res: Response) => {
-      res.send('ok');
-    });
-
-    const res = await request(app).get('/').expect(200);
-    assert.equal(res.text, 'ok');
+  app.get('/', (req: Request, res: Response) => {
+    res.send('ok');
   });
 
-  it('catch error to sync request', async () => {
-    const app = asyncify(express());
+  const res = await request(app).get('/').expect(200);
+  assert.equal(res.text, 'ok');
+});
 
-    app.get('/', (req: Request, res: Response) => {
-      throw new Error();
-    });
+test('catch error to sync request', async () => {
+  const app = asyncify(express());
 
-    app.use(handler500);
-
-    const res = await request(app).get('/').expect(500);
-    assert.equal(res.text, 'fail');
+  app.get('/', (req: Request, res: Response) => {
+    throw new Error();
   });
 
-  it('async request', async () => {
-    const app = asyncify(express());
+  app.use(handler500);
 
-    app.get('/', async (req: Request, res: Response) => {
-      const data = await getDataAsync('ok');
-      res.send(data);
-    });
+  const res = await request(app).get('/').expect(500);
+  assert.equal(res.text, 'fail');
+});
 
-    const res = await request(app).get('/').expect(200);
-    assert.equal(res.text, 'ok');
+test('async request', async () => {
+  const app = asyncify(express());
+
+  app.get('/', async (req: Request, res: Response) => {
+    const data = await getDataAsync('ok');
+    res.send(data);
   });
 
-  it('catch error to async request', async () => {
-    const app = asyncify(express());
+  const res = await request(app).get('/').expect(200);
+  assert.equal(res.text, 'ok');
+});
 
-    app.get('/', async (req: Request, res: Response) => {
-      const data = await getDataAsync(new Error());
-      res.send(data);
-    });
+test('catch error to async request', async () => {
+  const app = asyncify(express());
 
-    app.use(handler500);
-
-    const res = await request(app).get('/').expect(500);
-    assert.equal(res.text, 'fail');
+  app.get('/', async (req: Request, res: Response) => {
+    const data = await getDataAsync(new Error());
+    res.send(data);
   });
 
-  it('catch error to async/sync middleware', async () => {
-    const app = asyncify(express());
+  app.use(handler500);
 
-    const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-      await getDataAsync(new Error());
-      next();
-    };
+  const res = await request(app).get('/').expect(500);
+  assert.equal(res.text, 'fail');
+});
 
-    const syncMiddleware = function (req: Request, res: Response, next: NextFunction) {
-      next();
-    };
+test('catch error to async/sync middleware', async () => {
+  const app = asyncify(express());
 
-    app.use(asyncMiddleware, syncMiddleware, handler500);
+  const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    await getDataAsync(new Error());
+    next();
+  };
 
-    app.get('/', (req: Request, res: Response) => {
-      res.send('ok');
-    });
+  const syncMiddleware = function (req: Request, res: Response, next: NextFunction) {
+    next();
+  };
 
-    const res = await request(app).get('/').expect(500);
-    assert.equal(res.text, 'fail');
+  app.use(asyncMiddleware, syncMiddleware, handler500);
+
+  app.get('/', (req: Request, res: Response) => {
+    res.send('ok');
   });
 
-  it('catch error to async/sync middleware as array', async () => {
-    const app = asyncify(express());
+  const res = await request(app).get('/').expect(500);
+  assert.equal(res.text, 'fail');
+});
 
-    const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-      await getDataAsync(new Error());
-      next();
-    };
+test('catch error to async/sync middleware as array', async () => {
+  const app = asyncify(express());
 
-    const syncMiddleware = function (req: Request, res: Response, next: NextFunction) {
-      next();
-    };
+  const asyncMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    await getDataAsync(new Error());
+    next();
+  };
 
-    app.use([asyncMiddleware, syncMiddleware], handler500);
+  const syncMiddleware = function (req: Request, res: Response, next: NextFunction) {
+    next();
+  };
 
-    app.get('/', (req: Request, res: Response) => {
-      res.send('ok');
-    });
+  app.use([asyncMiddleware, syncMiddleware], handler500);
 
-    const res = await request(app).get('/').expect(500);
-    assert.equal(res.text, 'fail');
+  app.get('/', (req: Request, res: Response) => {
+    res.send('ok');
   });
 
-  it('catch error to app.all()', async () => {
-    const app = asyncify(express());
+  const res = await request(app).get('/').expect(500);
+  assert.equal(res.text, 'fail');
+});
 
-    app.all('/', async (req: Request, res: Response) => {
-      const data = await getDataAsync(new Error());
-      res.send(data);
-    });
+test('catch error to app.all()', async () => {
+  const app = asyncify(express());
 
-    app.use(handler500);
-
-    const resGet = await request(app).get('/').expect(500);
-    assert.equal(resGet.text, 'fail');
-
-    const resPost = await request(app).post('/').expect(500);
-    assert.equal(resPost.text, 'fail');
-
-    const resPut = await request(app).put('/').expect(500);
-    assert.equal(resPut.text, 'fail');
-
-    const resDel = await request(app).del('/').expect(500);
-    assert.equal(resDel.text, 'fail');
+  app.all('/', async (req: Request, res: Response) => {
+    const data = await getDataAsync(new Error());
+    res.send(data);
   });
 
-  it('catch error to app.route()', async () => {
-    const app = asyncify(express());
+  app.use(handler500);
 
-    app.route('/posts').get(async (req: Request, res: Response) => {
-      const data = await getDataAsync(new Error());
-      res.send(data);
-    });
+  const resGet = await request(app).get('/').expect(500);
+  assert.equal(resGet.text, 'fail');
 
-    app.use(handler500);
+  const resPost = await request(app).post('/').expect(500);
+  assert.equal(resPost.text, 'fail');
 
-    const res = await request(app).get('/posts').expect(500);
-    assert.equal(res.text, 'fail');
+  const resPut = await request(app).put('/').expect(500);
+  assert.equal(resPut.text, 'fail');
+
+  const resDel = await request(app).del('/').expect(500);
+  assert.equal(resDel.text, 'fail');
+});
+
+test('catch error to app.route()', async () => {
+  const app = asyncify(express());
+
+  app.route('/posts').get(async (req: Request, res: Response) => {
+    const data = await getDataAsync(new Error());
+    res.send(data);
   });
 
-  it('catch error to router', async () => {
-    const app = express();
-    const router = asyncify(express.Router());
+  app.use(handler500);
 
-    router.get('/', async (req: Request, res: Response) => {
-      const data = await getDataAsync(new Error());
-      res.send(data);
-    });
+  const res = await request(app).get('/posts').expect(500);
+  assert.equal(res.text, 'fail');
+});
 
-    app.use(router);
-    app.use(handler500);
+test('catch error to router', async () => {
+  const app = express();
+  const router = asyncify(express.Router());
 
-    const res = await request(app).get('/').expect(500);
-    assert.equal(res.text, 'fail');
+  router.get('/', async (req: Request, res: Response) => {
+    const data = await getDataAsync(new Error());
+    res.send(data);
   });
+
+  app.use(router);
+  app.use(handler500);
+
+  const res = await request(app).get('/').expect(500);
+  assert.equal(res.text, 'fail');
 });
