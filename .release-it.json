@@ -4,8 +4,7 @@
     "tagAnnotation": "Release ${tagName}"
   },
   "hooks": {
-    "after:init": ["npm run format", "npm test"],
-    "after:bump": "npm run build"
+    "after:init": ["npm run format", "npm test"]
   },
   "github": {
     "release": true
