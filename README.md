@@ -2,12 +2,12 @@
 
 Easy support `async/await` to [express](http://expressjs.com/).
 
-Supports ESM modules 👍
+✅ Since v4 support only ESM modules.
 
 ## Installation
 
 ```bash
-$ npm i express-asyncify
+$ npm i express express-asyncify
 ```
 
 ## Usage
@@ -17,8 +17,6 @@ Asyncify express application:
 ```javascript
 import express from 'express';
 import asyncify from 'express-asyncify';
-// For CommonJS
-// const asyncify = require('express-asyncify').default;
 
 const app = asyncify(express());
 
@@ -47,19 +45,6 @@ router.get('/', async (req, res) => {
 });
 
 app.use('/blog', router);
-```
-
-## TypeScript
-
-If you're having trouble importing a module into TypeScript, try adding settings to `tsconfig.json`:
-
-```json
-{
-    "compilerOptions": {
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true
-    }
-  }
 ```
 
 ## Tests
