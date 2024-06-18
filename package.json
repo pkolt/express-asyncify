@@ -3,13 +3,9 @@
   "version": "3.0.2",
   "description": "Easy support async/await to express",
   "type": "module",
-  "module": "./lib/index.js",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "require": "./lib/index.js",
       "types": "./lib/index.d.ts"
     }
   },
