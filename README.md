@@ -2,8 +2,9 @@
 
 Easy support `async/await` to [express](http://expressjs.com/).
 
-✅ Since v3 support only ESM modules.  
-✅ Zero dependencies
+🚨 Since v3:
+- Node.js >= 20
+- Only ESM modules
 
 ## Installation
 
